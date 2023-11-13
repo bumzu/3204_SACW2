@@ -1,0 +1,61 @@
+Model: RandomForestClassifier
+              precision    recall  f1-score   support
+
+         0.0       0.93      0.81      0.87       409
+         1.0       0.82      0.94      0.88       391
+
+    accuracy                           0.87       800
+   macro avg       0.88      0.87      0.87       800
+weighted avg       0.88      0.87      0.87       800
+
+Model: GradientBoostingClassifier
+              precision    recall  f1-score   support
+
+         0.0       0.96      0.81      0.88       409
+         1.0       0.83      0.97      0.89       391
+
+    accuracy                           0.89       800
+   macro avg       0.89      0.89      0.88       800
+weighted avg       0.90      0.89      0.88       800
+
+Model: KNeighborsClassifier
+              precision    recall  f1-score   support
+
+         0.0       0.96      0.81      0.88       409
+         1.0       0.83      0.96      0.89       391
+
+    accuracy                           0.88       800
+   macro avg       0.89      0.89      0.88       800
+weighted avg       0.89      0.88      0.88       800
+
+Model: DecisionTreeClassifier
+              precision    recall  f1-score   support
+
+         0.0       0.95      0.81      0.87       409
+         1.0       0.83      0.96      0.89       391
+
+    accuracy                           0.88       800
+   macro avg       0.89      0.88      0.88       800
+weighted avg       0.89      0.88      0.88       800
+
+Model: SVC
+              precision    recall  f1-score   support
+
+         0.0       0.97      0.81      0.88       409
+         1.0       0.83      0.97      0.89       391
+
+    accuracy                           0.89       800
+   macro avg       0.90      0.89      0.89       800
+weighted avg       0.90      0.89      0.89       800
+
+Model: MLPClassifier
+              precision    recall  f1-score   support
+
+         0.0       0.93      0.81      0.86       409
+         1.0       0.82      0.93      0.87       391
+
+    accuracy                           0.87       800
+   macro avg       0.87      0.87      0.87       800
+weighted avg       0.88      0.87      0.87       800
+
+Cross-validated F1 scores: [0.8798417  0.88477804 0.88120994 0.87420594 0.8723864 ]
