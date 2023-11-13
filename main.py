@@ -106,6 +106,11 @@ X_scaled = scaler.fit_transform(X_imputed)
 # Splitting the data into training and validation sets
 X_train, X_val, y_train, y_val = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
 
+# Feature Selection: SelectKBest
+select = SelectKBest(score_func=f_classif, k=15)  # Adjust 'k' as needed
+X_train_selected = select.fit_transform(X_train, y_train)
+X_val_selected = select.transform(X_val)
+
 # Initialize a list of models
 models = [
     RandomForestClassifier(n_estimators=100, random_state=42),
@@ -115,44 +120,25 @@ models = [
     
 ]
 
-
 # Train the RandomForestClassifier
 rf = RandomForestClassifier(n_estimators=100, random_state=42)
 rf.fit(X_train, y_train)
 
-
 # Train and evaluate models
 for model in models:
     # Train the model
-    model.fit(X_train, y_train)
+    model.fit(X_train_selected, y_train)
     
     # Predict on validation set
-    y_val_pred = model.predict(X_val)
+    y_val_pred = model.predict(X_val_selected)
     
     # Evaluation
     print(f"Model: {model.__class__.__name__}")
     print(classification_report(y_val, y_val_pred))
 
-# Hyperparameter tuning for the best-performing model
-# Example for RandomForestClassifier
-parameters = {
-    'n_estimators': [100, 200, 500],
-    'learning_rate': [0.01, 0.1, 0.2],
-    'max_depth': [3, 5, 7],
-    'min_samples_split': [2, 5, 10],
-    'subsample': [0.8, 0.9, 1.0]
-}
-clf = GridSearchCV(GradientBoostingClassifier(random_state=42), parameters, cv=5, scoring='f1')
-clf.fit(X_train, y_train)
-# Best parameter set
-print(f"Best parameters: {clf.best_params_}")
-
-# Train the model with best parameters
-best_model = clf.best_estimator_
-best_model.fit(X_train, y_train)
-
-# Predict on validation set
-y_val_pred = best_model.predict(X_val)
-scores = cross_val_score(best_model, X_scaled, y, cv=5, scoring='f1')
-print(f"Cross-validated f1-scores: {scores}")
+# Cross-validation for the best model
+# Example: GradientBoostingClassifier
+best_model = GradientBoostingClassifier(n_estimators=100, random_state=42)
+scores = cross_val_score(best_model, X_scaled, y, cv=5, scoring='f1_macro')
+print(f"Cross-validated F1 scores: {scores}")
 
