@@ -23,7 +23,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.feature_selection import RFE
-
+from sklearn.feature_selection import VarianceThreshold
 
 # Load the dataset
 file_path = 'train.csv'
@@ -89,8 +89,15 @@ for col in ['entry', 'imports', 'exports', 'datadirectories',
 cols_to_drop = ['md5'] + [col for col in data_cleaned.columns if 'unnamed' in col.lower()]
 data_cleaned.drop(cols_to_drop, axis=1, inplace=True)
 
-X = data_cleaned.drop('label', axis=1)
-y = data_cleaned['label']
+# Balancing the classes by undersampling the majority class
+data_majority = data_cleaned[data_cleaned['label'] == 0.0]
+data_minority = data_cleaned[data_cleaned['label'] == 1.0]
+data_majority_downsampled = data_majority.sample(len(data_minority), random_state=42)
+data_balanced = pd.concat([data_majority_downsampled, data_minority])
+
+# Define features and target
+X = data_balanced.drop('label', axis=1)
+y = data_balanced['label']
 
 
 # Imputation of missing values for numerical columns
@@ -101,19 +108,22 @@ X_imputed = imputer.fit_transform(X)
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X_imputed)
 
-
+# Apply Variance Threshold to remove constant features
+selector = VarianceThreshold()
+X_var_threshold = selector.fit_transform(X_scaled)
 
 # Splitting the data into training and validation sets
-X_train, X_val, y_train, y_val = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+X_train, X_val, y_train, y_val = train_test_split(X_var_threshold, y, test_size=0.2, random_state=42)
+
 
 # Feature Selection: SelectKBest
-select = SelectKBest(score_func=f_classif, k=15)  # Adjust 'k' as needed
+select = SelectKBest(score_func=f_classif, k=12)  # Adjust 'k' as needed
 X_train_selected = select.fit_transform(X_train, y_train)
 X_val_selected = select.transform(X_val)
 
 # Initialize a list of models
 models = [
-    RandomForestClassifier(n_estimators=100, random_state=42),
+    RandomForestClassifier(n_estimators=100, random_state=42, class_weight='balanced'),
     GradientBoostingClassifier(n_estimators=100, random_state=42),
     KNeighborsClassifier(),
     DecisionTreeClassifier(random_state=42)  # Default parameters for Decision Tree
