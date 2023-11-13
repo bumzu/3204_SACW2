@@ -5,7 +5,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, accuracy_score
 from sklearn.impute import SimpleImputer
-from xgboost import XGBClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
@@ -14,10 +13,8 @@ from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import classification_report
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
-from xgboost import XGBClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
-from imblearn.over_sampling import SMOTE
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
 from sklearn.model_selection import cross_val_score
@@ -113,25 +110,21 @@ X_train, X_val, y_train, y_val = train_test_split(X_scaled, y, test_size=0.2, ra
 models = [
     RandomForestClassifier(n_estimators=100, random_state=42),
     GradientBoostingClassifier(n_estimators=100, random_state=42),
-    XGBClassifier(n_estimators=100, eval_metric='logloss', use_label_encoder=False, random_state=42),
     KNeighborsClassifier(),
     DecisionTreeClassifier(random_state=42)  # Default parameters for Decision Tree
     
 ]
 
-# Apply SMOTE only on training data
-smote = SMOTE(random_state=42)
-X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)
 
 # Train the RandomForestClassifier
 rf = RandomForestClassifier(n_estimators=100, random_state=42)
-rf.fit(X_train_smote, y_train_smote)
+rf.fit(X_train, y_train)
 
 
 # Train and evaluate models
 for model in models:
     # Train the model
-    model.fit(X_train_smote, y_train_smote)
+    model.fit(X_train, y_train)
     
     # Predict on validation set
     y_val_pred = model.predict(X_val)
@@ -150,7 +143,7 @@ parameters = {
     'subsample': [0.8, 0.9, 1.0]
 }
 clf = GridSearchCV(GradientBoostingClassifier(random_state=42), parameters, cv=5, scoring='f1')
-clf.fit(X_train_smote, y_train_smote)
+clf.fit(X_train, y_train)
 # Best parameter set
 print(f"Best parameters: {clf.best_params_}")
 
