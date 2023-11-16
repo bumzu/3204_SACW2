@@ -27,19 +27,7 @@ from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.feature_selection import RFE
 from sklearn.feature_selection import VarianceThreshold
 
-# # Check for correct amount of arguments
-# if len(sys.argv) != 3:
-#     print("Usage: python3 main.py <training_csv> <testing_csv>")
-#     print("Example: python3 main.py train.csv UnseenData.csv")
-#     sys.exit(1)
-
-# trainingCSVfile = sys.argv[1]
-# testingCSVfile = sys.argv[2]
-
-# # Check if the last two arguments are CSV files
-# if not trainingCSVfile.endswith(".csv") or not testingCSVfile.endswith(".csv"):
-#     print("Error: Both arguments should be .csv files.")
-#     sys.exit(1)
+# This file is used to evaluate the best model
 
 # Load the dataset
 try:
@@ -138,7 +126,6 @@ X_var_threshold = selector.fit_transform(X_scaled)
 X_train, X_val, y_train, y_val = train_test_split(X_var_threshold, y, test_size=0.2695, random_state=42)
 
 # Feature Selection: SelectKBest
-#select = SelectKBest(score_func=f_classif, k=2)  # Adjust 'k' as needed
 select = SelectKBest(score_func=f_classif, k=2)  # Adjust 'k' as needed
 X_train_selected = select.fit_transform(X_train, y_train)
 X_val_selected = select.transform(X_val)

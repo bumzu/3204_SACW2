@@ -11,3 +11,11 @@ Setup?:
 4. VSCode will do something like ```conda activate c:\Users\<user>\3204_SACW2\.conda```
 5. Type ```conda create -n sklearn-env -c conda-forge scikit-learn``` and enter
 6. Type ```conda activate sklearn-env``` and enter
+
+## Repo Files
+
+- ```evaluation.py``` is the file used to evaluate the best model.
+- ```mypredict.py``` is the file used to predict the actual 'label' column. (this is to be submitted)
+- ```generate.py``` is the file used to generate your own unseendata.csv
+
+Sample UnseenData has already been provided.
