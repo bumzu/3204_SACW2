@@ -139,13 +139,16 @@ X_train_scaled = scaler.fit_transform(X_train_imputed)
 select = SelectKBest(f_classif, k=2)  # Adjust 'k' as needed
 X_train_selected = select.fit_transform(X_train_scaled, y_train)
 
+# Define the best hyperparameters for your GradientBoostingClassifier
+best_params = {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+
 # Apply the same transformations to unseen data
 X_unseen_imputed = imputer.transform(X_unseen_encoded)
 X_unseen_scaled = scaler.transform(X_unseen_imputed)
 X_unseen_selected = select.transform(X_unseen_scaled)
 
 # Train the model
-model = GradientBoostingClassifier(n_estimators=100, random_state=42)
+model = GradientBoostingClassifier(**best_params, random_state=42)
 model.fit(X_train_selected, y_train)
 
 # Predict on unseen data
