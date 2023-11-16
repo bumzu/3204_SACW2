@@ -60,7 +60,6 @@ data_cleaned.dropna(how='all', inplace=True)
 
 # Check for missing values in each column
 missing_values = data_cleaned.isnull().sum()
-#print(missing_values)
 
 # Impute missing values in 'avclass' with a new category 'unknown'
 data_cleaned.loc[:, 'avclass'].fillna('unknown', inplace=True)
@@ -156,10 +155,6 @@ models = [
     SVC(probability=True),  # Probability for soft voting in the ensemble
     MLPClassifier(max_iter=500, early_stopping=True, random_state=42)
 ]
-
-# Train the RandomForestClassifier
-rf = RandomForestClassifier(n_estimators=100, random_state=42)
-rf.fit(X_train, y_train)
 
 # Train and evaluate models
 for model in models:
