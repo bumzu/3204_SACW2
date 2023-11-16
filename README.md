@@ -15,6 +15,7 @@ Setup?:
 ## Repo Files
 
 - ```evaluation.py``` is the file used to evaluate the best model.
+- ```gradient.py``` is to search for the best hyperparmeters in our best model.
 - ```mypredict.py``` is the file used to predict the actual 'label' column. (this is to be submitted)
 - ```generate.py``` is the file used to generate your own unseendata.csv
 
