@@ -94,10 +94,9 @@ if not train_file_path.endswith(".csv") or not unseen_file_path.endswith(".csv")
     print("Error: Both arguments should be .csv files.")
     sys.exit(1)
 
-# Load and preprocess training data
+# Load training data
 try:
     train_data = pd.read_csv(train_file_path)
-    X_train, y_train = preprocess_data(train_data, is_training_data=True)
 except FileNotFoundError:
     print(f"Error: File '{train_file_path}' not found.")
     sys.exit(1)
@@ -105,16 +104,19 @@ except Exception as e:
     print(f"Error reading '{train_file_path}': {e}")
     sys.exit(1)
 
-# Load and preprocess unseen data
+# Load unseen data
 try:
     unseen_data = pd.read_csv(unseen_file_path)
-    X_unseen, _ = preprocess_data(unseen_data, is_training_data=False)
 except FileNotFoundError:
-    print(f"Error: File '{train_file_path}' not found.")
+    print(f"Error: File '{unseen_file_path}' not found.")
     sys.exit(1)
 except Exception as e:
-    print(f"Error reading '{train_file_path}': {e}")
+    print(f"Error reading '{unseen_file_path}': {e}")
     sys.exit(1)
+
+# If no issues during load, preprocess training and unseen data
+X_train, y_train = preprocess_data(train_data, is_training_data=True)
+X_unseen, _ = preprocess_data(unseen_data, is_training_data=False)
 
 # Combine, one-hot encode, and then split the data back
 nominal_cols = ['coff.machine', 'optional.subsystem', 'optional.magic']
